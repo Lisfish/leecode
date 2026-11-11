@@ -121,7 +121,6 @@ return "".join(result)
 
 ## 四、最小修改版
 
-以下版本保留了你“先交替拼接，再补尾部”的原始思路：
 
 ```python
 class Solution(object):
@@ -176,7 +175,7 @@ class Solution(object):
 
 ## 六、本题需要记住的点
 
-1. Python 用缩进划分代码块，不写 `{}`。
+1. Python 用缩进划分代码块，不写 `{}`
 2. `range(...)` 必须加括号。
 3. `append(...)` 是方法调用，必须用圆括号。
 4. Python 的 `for` 是“遍历”语义，不写 C/Java 的三段式循环。
