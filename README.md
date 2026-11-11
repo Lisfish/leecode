@@ -25,7 +25,10 @@ leecode/
 ├── README.md
 ├── .gitignore
 ├── 基础0-1/
+│   ├── 1768_initial_code_review.md
 │   └── 1768_merge_strings_alternately.py
+├── git使用介绍/
+│   └── README.md
 └── solutions/
     └── .gitkeep
 ```
@@ -37,6 +40,10 @@ leecode/
 
 命名规则：`题号_英文题名.py`，题号补足三位，题名用 snake_case。
 例如 LeetCode 1「两数之和」→ `001_two_sum.py`。
+
+## 📚 学习资料
+
+- [Git 使用指南](git使用介绍/README.md)
 
 ## 📊 Hot 100 刷题进度
 
