@@ -25,7 +25,7 @@ leecode/
 ├── README.md
 ├── .gitignore
 ├── 基础0-1/
-│   └── .gitkeep
+│   └── 1768_merge_strings_alternately.py
 └── solutions/
     └── .gitkeep
 ```
