@@ -25,12 +25,11 @@ leecode/
 ├── README.md
 ├── .gitignore
 ├── 基础0-1/
-│   ├── 1768_initial_code_review.md
 │   └── 1768_merge_strings_alternately.py
 ├── git使用介绍/
 │   └── README.md
 └── solutions/
-    └── .gitkeep
+    └── 1768_initial_code_review.md
 ```
 
 后续刷题安排：
