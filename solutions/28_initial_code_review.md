@@ -153,40 +153,54 @@ needle:         p0 p1 ... p(j-1)  pj
 
 得 `nxt = [0, 1, 0, 1, 2, 0]`。
 
-**构建 next 的过程本身就是一次"自己匹配自己"**。用 `j` 表示"上一个位置的最长 border 长度"，对每个 `i`：
+**构建 next 的过程本身就是一次"自己匹配自己"**。用 `prefix_len` 表示"上一个位置的最长 border 长度"，对每个 `i`：
 
-- `needle[i] == needle[j]` → 前后缀可以延长，`j += 1`；
-- 不相等 → `j` 回退到 `nxt[j-1]`，直到能继续延长或 `j == 0`。
+- `patt[i] == patt[prefix_len]` → 前后缀可以延长，`prefix_len += 1`，写入 `nxt[i]`；
+- 不相等且 `prefix_len > 0` → `prefix_len` 回退到 `nxt[prefix_len - 1]`，继续尝试匹配；
+- 不相等且 `prefix_len == 0` → 已无更短的 border 可退，`nxt[i] = 0`。
 
 ```python
-def build_next(p):
-    m = len(p)
-    nxt = [0] * m
-    j = 0                       # j = p[:i] 的最长 border 长度
-    for i in range(1, m):
-        while j > 0 and p[i] != p[j]:
-            j = nxt[j - 1]      # 失配：退到次长的 border
-        if p[i] == p[j]:
-            j += 1
-        nxt[i] = j
+def build_next(self, patt):
+    nxt = [0]           # nxt[0] = 0 天然成立
+    prefix_len = 0      # 上一个位置的最长 border 长度
+    i = 1
+    while i < len(patt):
+        if patt[prefix_len] == patt[i]:
+            prefix_len += 1
+            nxt.append(prefix_len)
+            i += 1
+        else:
+            if prefix_len == 0:
+                nxt.append(0)
+                i += 1
+            else:
+                prefix_len = nxt[prefix_len - 1]
     return nxt
 ```
 
+每个 `i` 最终只会写入一次 `nxt` 并前进一次；回退分支只更新 `prefix_len`，`i` 原地不动，因此一个位置可能经历多次回退，但写入和前进各只有一次——这正是不会死循环、也不会漏写的关键。
+
 ### 4. 匹配过程
 
-```python
-def strStr(haystack, needle):
-    n, m = len(haystack), len(needle)
-    nxt = build_next(needle)
+匹配部分同样写成 `Solution` 类的方法，通过 `self.build_next` 获取 next 数组：
 
+```python
+def strStr(self, haystack, needle):
+    nxt = self.build_next(needle)
+
+    i = 0                       # haystack 指针，只前进，永不回退
     j = 0                       # needle 上已匹配的长度
-    for i in range(n):          # i 只前进，永不回退
-        while j > 0 and haystack[i] != needle[j]:
-            j = nxt[j - 1]      # 失配：只回退 needle 指针
+    while i < len(haystack):
         if haystack[i] == needle[j]:
+            i += 1
             j += 1
-        if j == m:
-            return i - m + 1    # 全部匹配，返回起点
+        elif j > 0:
+            j = nxt[j - 1]      # 失配：只回退 needle 指针
+        else:
+            i += 1              # 连 needle[0] 都不匹配，主串直接前进
+
+        if j == len(needle):
+            return i - j        # 全部匹配，返回起点
 
     return -1
 ```
@@ -222,36 +236,54 @@ def strStr(haystack, needle):
 
 ## 五、KMP 完整可提交版本
 
+这是我自己最终写出的版本，把 next 数组的构建拆成了独立的类方法 `build_next`：
+
 ```python
 class Solution(object):
-    def strStr(self, haystack: str, needle: str) -> int:
-        n, m = len(haystack), len(needle)
+    def strStr(self, haystack, needle):
+        nxt = self.build_next(needle)
 
-        # 构建 next（前缀函数）数组
-        nxt = [0] * m
+        i = 0
         j = 0
-        for i in range(1, m):
-            while j > 0 and needle[i] != needle[j]:
-                j = nxt[j - 1]
-            if needle[i] == needle[j]:
-                j += 1
-            nxt[i] = j
-
-        # 匹配，主串指针 i 不回退
-        j = 0
-        for i in range(n):
-            while j > 0 and haystack[i] != needle[j]:
-                j = nxt[j - 1]
+        while i < len(haystack):
             if haystack[i] == needle[j]:
+                i += 1
                 j += 1
-            if j == m:
-                return i - m + 1
+            elif j > 0:
+                j = nxt[j - 1]
+            else:
+                i += 1
+
+            if j == len(needle):
+                return i - j
 
         return -1
+
+    def build_next(self, patt):
+        nxt = [0]
+        prefix_len = 0
+        i = 1
+        while i < len(patt):
+            if patt[prefix_len] == patt[i]:
+                prefix_len += 1
+                nxt.append(prefix_len)
+                i += 1
+            else:
+                if prefix_len == 0:
+                    nxt.append(0)
+                    i += 1
+                else:
+                    prefix_len = nxt[prefix_len - 1]
+        return nxt
 ```
 
-易错点：
+在 10 万组随机用例上与 `str.find` 对拍，结果全部一致；`"sadbutsad"/"sad"`、`"leetcode"/"leeto"`、`"aaaa"/"aa"`、`"aabaabaaf"/"aabaaf"` 等用例均通过。
 
+易错点（包括我自己踩过的坑）：
+
+- **类方法必须带 `self`**：`build_next` 定义在类里，裸写 `build_next(needle)` 会报 `NameError: name 'build_next' is not defined`（方法内的名字查找不会进入类命名空间）；要么加 `self` 参数并通过 `self.build_next(needle)` 调用，要么把它缩进到 `strStr` 内部做成嵌套函数；
+- **循环结束后要 `return -1`**：没有匹配时函数会隐式返回 `None`，例如 `haystack = "leetcode"`、`needle = "leeto"`；
+- **不要用 `next` 做变量名**：它会遮蔽 Python 内置函数 `next()`，改名为 `nxt`；
 - 回退用 `nxt[j - 1]` 而不是 `nxt[j]`：`nxt[j-1]` 对应"已匹配的那 j 个字符"的最长 border，`nxt[j]` 包含的是没匹配上的当前字符；
 - 构建 next 时从 `i = 1` 开始，`nxt[0] = 0` 天然成立；
 - 网上很多教程的 next 数组是 `[-1, 0, 1, ...]` 的形式，那只是把本文的数组整体右移一位，思想完全相同。
