@@ -14,7 +14,7 @@
 ## 📖 项目简介
 
 - **语言**：Python 3.10+
-- **内容**：每题包含思路说明、代码实现、复杂度分析
+- **内容**：`基础0-1/` 记录题目、解题思路与复杂度分析；`solutions/` 保存初始代码复盘，包含错误分析、修正代码与算法详解
 - **组织方式**：按阶段或专题划分文件夹，便于持续练习和复习
 - **依赖**：无第三方依赖，标准库即可运行
 
@@ -25,22 +25,32 @@ leecode/
 ├── README.md
 ├── .gitignore
 ├── 基础0-1/
-│   ├── 1768_merge_strings_alternately.py
-│   └── 389_find_the_difference.py
+│   ├── 28_find_the_index_of_the_first_occurrence_in_a_string.py
+│   ├── 389_find_the_difference.py
+│   └── 1768_merge_strings_alternately.py
 ├── git使用介绍/
 │   └── README.md
 └── solutions/
-    ├── 1768_initial_code_review.md
-    └── 389_initial_code_review.md
+    ├── 28_initial_code_review.md
+    ├── 389_initial_code_review.md
+    └── 1768_initial_code_review.md
 ```
 
 后续刷题安排：
 
-- `基础0-1/`：基础阶段练习目录，用于记录接下来的 LeetCode 入门题目。
-- `solutions/`：预留的 Hot 100 题解目录，后续可按分类继续补充。
+- `基础0-1/`：基础阶段练习目录，仅保留题目、思路和复杂度分析，不放置代码，代码独立练习后记录在复盘文档中。
+- `solutions/`：初始代码复盘目录，按题号记录初版代码的错误分析与改进过程，后续可按分类继续补充。
 
-命名规则：`题号_英文题名.py`，题号补足三位，题名用 snake_case。
-例如 LeetCode 1「两数之和」→ `001_two_sum.py`。
+命名规则：`题号_英文题名.py`，题号按题目原编号书写（不补零），题名用 snake_case。
+例如 LeetCode 28「找出字符串中第一个匹配项的下标」→ `28_find_the_index_of_the_first_occurrence_in_a_string.py`。
+
+## ✅ 已完成题目
+
+| 题号 | 题目 | 核心思路 | 复盘 |
+| :---: | :--- | :--- | :---: |
+| 28 | [找出字符串中第一个匹配项的下标](https://leetcode.cn/problems/find-the-index-of-the-first-occurrence-in-a-string/) | 暴力匹配；KMP 失配时按 next 数组回退 | [复盘](solutions/28_initial_code_review.md) |
+| 389 | [找不同](https://leetcode.cn/problems/find-the-difference/) | ASCII 求和 / 异或 | [复盘](solutions/389_initial_code_review.md) |
+| 1768 | [交替合并字符串](https://leetcode.cn/problems/merge-strings-alternately/) | 双指针按下标交替拼接 | [复盘](solutions/1768_initial_code_review.md) |
 
 ## 📚 学习资料
 
@@ -73,40 +83,26 @@ leecode/
 
 ## 🗂️ 题解模板
 
-每个题解文件使用统一结构，方便复习：
+`基础0-1/` 中的文件只记录题目与思路，不包含代码：
 
 ```python
 """
-1. 两数之和
-https://leetcode.cn/problems/two-sum/
+28. 找出字符串中第一个匹配项的下标
+https://leetcode.cn/problems/find-the-index-of-the-first-occurrence-in-a-string/
 
-思路：用哈希表记录已经遍历过的元素，查找 target - num 是否出现过。
-时间复杂度：O(n)
-空间复杂度：O(n)
+思路：暴力匹配。枚举所有可能的起点，逐字符与 needle 比较；
+全部起点尝试完仍未匹配则返回 -1。
+
+时间复杂度：O(m * n)
+空间复杂度：O(1)
 """
-
-from typing import List
-
-
-class Solution:
-    def twoSum(self, nums: List[int], target: int) -> List[int]:
-        seen = {}
-        for i, num in enumerate(nums):
-            if target - num in seen:
-                return [seen[target - num], i]
-            seen[num] = i
-        return []
 ```
 
-## ▶️ 运行方式
+初始代码、错误分析与修正版本统一记录在 `solutions/<题号>_initial_code_review.md`。
 
-```bash
-python solutions/001_two_sum.py
-```
+## ▶️ 本地验证
 
-建议在文件末尾用 `if __name__ == "__main__":` 写几组测试用例，方便本地自测。
-
-
+复习时，将 `solutions/` 复盘文档中的完整代码复制到本地 `.py` 文件运行，即可验证思路。
 
 ## 🔗 参考
 
