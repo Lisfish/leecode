@@ -3,8 +3,8 @@
 ## 一、初始代码
 
 ```python
-class Solution:
-    def isAnagram(self, s: str, t: str) -> bool:
+class Solution(object):
+    def isAnagram(self, s, t):
         if len(s) != len(t):
             return False
 
@@ -19,6 +19,8 @@ class Solution:
 ```
 
 > 这段代码可以直接运行，两个示例与全部边界用例均通过。核心思路是「长度剪枝 + 26 位计数数组」，比排序、哈希表写法都更贴合本题「仅小写字母」的约束。
+>
+> 本版本不使用类型标注（`s: str`、`-> bool`），因此在 Python 2 和 Python 3 下都能运行。LeetCode 语言选项中的 `Python` 是 2.7，`Python3` 才支持类型标注；若报 `SyntaxError: invalid syntax` 且 `^` 指向参数后的冒号，通常是选错了语言版本。
 
 ## 二、正确性分析
 
@@ -129,3 +131,4 @@ return sorted(s) == sorted(t)
 4. 「`s` 加、`t` 减」的差值计数法是判断两组元素频次是否一致的标准套路，可推广到 383. 赎金信等题目。
 5. 提前返回负数后直接 `return True` 的正确性依赖长度检查：等长保证计数总和为 0。
 6. 通用性与性能要按题目约束取舍：26 位数组快但只适用于小写字母；字典 / `Counter` 更通用。
+7. 函数参数标注（`s: str`）和返回值标注（`-> bool`）是 Python 3 语法；在 LeetCode 提交时语言选项要选 `Python3`，选成 `Python`（2.7）会报 `SyntaxError`。
