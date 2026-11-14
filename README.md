@@ -26,12 +26,14 @@ leecode/
 ├── .gitignore
 ├── 基础0-1/
 │   ├── 28_find_the_index_of_the_first_occurrence_in_a_string.py
+│   ├── 242_valid_anagram.py
 │   ├── 389_find_the_difference.py
 │   └── 1768_merge_strings_alternately.py
 ├── git使用介绍/
 │   └── README.md
 └── solutions/
     ├── 28_initial_code_review.md
+    ├── 242_initial_code_review.md
     ├── 389_initial_code_review.md
     └── 1768_initial_code_review.md
 ```
@@ -49,6 +51,7 @@ leecode/
 | 题号 | 题目 | 核心思路 | 复盘 |
 | :---: | :--- | :--- | :---: |
 | 28 | [找出字符串中第一个匹配项的下标](https://leetcode.cn/problems/find-the-index-of-the-first-occurrence-in-a-string/) | 暴力匹配；KMP 失配时按 next 数组回退 | [复盘](solutions/28_initial_code_review.md) |
+| 242 | [有效的字母异位词](https://leetcode.cn/problems/valid-anagram/) | 先比较长度；26 位计数数组分别加一减一 | [复盘](solutions/242_initial_code_review.md) |
 | 389 | [找不同](https://leetcode.cn/problems/find-the-difference/) | ASCII 求和 / 异或 | [复盘](solutions/389_initial_code_review.md) |
 | 1768 | [交替合并字符串](https://leetcode.cn/problems/merge-strings-alternately/) | 双指针按下标交替拼接 | [复盘](solutions/1768_initial_code_review.md) |
 
